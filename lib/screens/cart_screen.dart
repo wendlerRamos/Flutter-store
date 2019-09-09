@@ -8,6 +8,7 @@ import 'package:loja_app/widgets/ship_cart.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'login_screen.dart';
+import 'order_screen.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -70,14 +71,20 @@ class CartScreen extends StatelessWidget {
                 children: <Widget>[
                   Column(
                     children: model.products.map((product){
-                      print("Product: ${product.category}");
                       return CartTile(product);
                     }).toList(),
                   ),
                   DiscountCart(),
                   ShipCart(),
                   CartPrice(
-                      (){}
+                      () async {
+                        String orderId = await model.finishOrder();
+                        if(orderId != null){
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (context) => OrderScreen(orderId))
+                          );
+                        }
+                      }
                   ),
                 ],
               );

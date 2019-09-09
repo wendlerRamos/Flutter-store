@@ -121,7 +121,7 @@ class CartModel extends Model{
 
     products.clear();
 
-    couponCode = null;
+    cupomCode = null;
     discountPercentage = 0;
 
     isLoading = false;
