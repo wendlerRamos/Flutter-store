@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:loja_app/models/cart_model.dart';
 import 'package:loja_app/models/user_model.dart';
 import 'package:loja_app/tiles/cart_tile.dart';
+import 'package:loja_app/widgets/cart_price.dart';
+import 'package:loja_app/widgets/discount_cart.dart';
+import 'package:loja_app/widgets/ship_cart.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'login_screen.dart';
@@ -62,15 +65,20 @@ class CartScreen extends StatelessWidget {
               return Center(
                 child: Text("Nenhum produto no carrinho", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor), textAlign: TextAlign.center,),
               );
-            }
-            else{
+            }else{
               return ListView(
                 children: <Widget>[
                   Column(
                     children: model.products.map((product){
+                      print("Product: ${product.category}");
                       return CartTile(product);
                     }).toList(),
-                  )
+                  ),
+                  DiscountCart(),
+                  ShipCart(),
+                  CartPrice(
+                      (){}
+                  ),
                 ],
               );
             }

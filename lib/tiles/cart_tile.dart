@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:loja_app/datas/cart_product.dart';
 import 'package:loja_app/datas/product_data.dart';
+import 'package:loja_app/models/cart_model.dart';
 
 class CartTile extends StatelessWidget {
   final CartProduct cartProduct;
@@ -13,6 +14,7 @@ class CartTile extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Widget _buiderContent(){
+      CartModel.of(context).updatePrices();
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -45,21 +47,25 @@ class CartTile extends StatelessWidget {
                     children: <Widget>[
                       IconButton(
                         icon: Icon(Icons.remove),
-                        onPressed: cartProduct.quantity > 1  ? (){} : null,
+                        onPressed: cartProduct.quantity > 1  ? (){
+                          CartModel.of(context).decProduct(cartProduct);
+                        } : null,
                         color: Theme.of(context).primaryColor,
 
                       ),
                       Text(cartProduct.quantity.toString()),
                       IconButton(
                         icon: Icon(Icons.add),
-                        onPressed: (){},
+                        onPressed: (){
+                          CartModel.of(context).incProduct(cartProduct);
+                        },
                         color: Theme.of(context).primaryColor,
                       ),
                       FlatButton(
                         child: Icon(Icons.delete, size: 25.0,),
                         textColor: Colors.red[600],
                         onPressed: (){
-
+                          CartModel.of(context).removeCartItem(cartProduct);
                         },
                       )
                     ],
@@ -76,8 +82,9 @@ class CartTile extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 8.0,vertical: 4.0),
       child: cartProduct.productData == null ?
         FutureBuilder<DocumentSnapshot>(
-            future: Firestore.instance.collection("products").document(cartProduct.category).collection("items").document(cartProduct.pid).get(),
-          builder: (context, snapshot){
+          future: Firestore.instance.collection("products").document(cartProduct.category)
+              .collection("items").document(cartProduct.pid).get(),
+          builder: (context, snapshot) {
               if(snapshot.hasData){
                 cartProduct.productData = ProductData.fromDocument(snapshot.data);
                 return _buiderContent();
@@ -89,7 +96,7 @@ class CartTile extends StatelessWidget {
                 );
               }
           },
-        ) : _buiderContent(),
+        ) : _buiderContent()
     );
   }
 }
