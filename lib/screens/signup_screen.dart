@@ -74,6 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: _passController,
                   decoration: InputDecoration(
                     hintText: "Senha",
+
                   ),
                   obscureText: true,
                   validator: (text) {
@@ -82,6 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(
                   height: 16.0,
+                  
                 ),
                 RaisedButton(
                   child: Text(
